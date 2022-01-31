@@ -16,6 +16,7 @@ mongoose
         console.log(err)
     });
 
+app.use(express.json()); // added to accept JSON values from the requests.
 app.use("/api/users", userRoute);
 
 app.listen(process.env.PORT || 5000, () => {
