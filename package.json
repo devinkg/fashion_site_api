@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Devin DeeKay",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^15.0.0",
