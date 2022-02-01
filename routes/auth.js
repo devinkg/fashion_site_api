@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
         OriginalPassword !== req.body.password &&
             res.status(401).json("Wrong credentials!");
 
-        const { password, ...others } = user._doc;
+        const { password, ...others } = user._doc; // user saved as _.doc in mongoDB due to that need to use _doc key.
 
         res.status(200).json(others);
 
