@@ -1,16 +1,28 @@
 const jwt = require("jsonwebtoken");
 
-const verifyToken = (req,res,next)=>{
+const verifyToken = (req, res, next) => {
     const authHeader = req.headers.token;
-    if(authHeader){
-        jwt.verify(token, process.env.JWT_SEC, (err, user) => {
+    if (authHeader) {
+        const token = authHeader.split(" ")[1];
+        jwt.verify(token, process.env.JWT_SEC, (err, loggedUser) => {
             if (err) res.status(403).json("Token is not valid!");
-            req.person = user;
+            req.person = loggedUser; // you can use any name instead of "person" if you want. // Assigning loggedUser extract values to the req.person
             next();
         })
-    }else{
+    } else {
         return res.status(401).json("You are not authenticated!");
     }
 }
 
-module.exports = { verifyToken };
+const verifyTokenAndAuthorization = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.person.id === req.params.id || req.person.isAdmin) {
+            next();
+        } else {
+            res.status(403).json("You are not allowed to do that!")
+        }
+    })
+
+}
+
+module.exports = { verifyToken, verifyTokenAndAuthorization };
