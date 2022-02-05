@@ -31,7 +31,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
             { new: true } // by adding this, returning updated values in response, unless it won't
         );
 
-        res.status(200).json(updatedUser);
+        res.status(200).json(updatedProduct);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -41,7 +41,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 
     try {
-        await { Product }.findByIdAndDelete(req.params.id)
+        await Product.findByIdAndDelete(req.params.id);
         res.status(200).json("Product has been deleted...")
     } catch (err) {
         res.status(500).json(err);
@@ -61,5 +61,30 @@ router.get("/find/:id", async (req, res) => {
 
 });
 
+//GET ALL PRODUCTS
+router.get("/", async (req, res) => {
+    const qNew = req.query.new;
+    const qCategoty = req.query.category;
+
+    try {
+        let products;
+        if (qNew) {
+            products = await Product.find().sort({ createdAt: -1 }).limit(5)
+        } else if (qCategoty) {
+            products = await Product.find({
+                categories: {
+                    $in: [qCategoty]
+                },
+            })
+        } else {
+            products = await Product.find();
+        }
+
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+
+});
 
 module.exports = router;
