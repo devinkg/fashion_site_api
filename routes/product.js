@@ -18,6 +18,25 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
+})
+
+//UPDATE
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id,
+            {
+                $set: req.body //taking everything in that req.body and set it again
+            },
+            { new: true } // by adding this, returning updated values in response, unless it won't
+        );
+
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
+
+
 
 module.exports = router;
